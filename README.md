@@ -25,4 +25,6 @@ Essa entrega tem como objetivo nos ajudar a entender sua forma de pensar e estru
 - Sinta-se livre para incluir diagramas de arquitetura. O mais importante é deixar claro como cada componente se relaciona.
 - Use qualquer ferramenta para montar sua solução. Pode utilizar um documento no Microsoft Word, Google Docs, desenhos à mão ou ferramentas digitais (Excalidraw, Draw.io ou qualquer outro software). Sugerimos que mantenha a entrega entre 1 a 2 páginas ou imagens.
 
+![Diagrama de Arquitetura](Architecture.png)
+
 ---
