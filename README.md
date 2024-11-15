@@ -27,4 +27,60 @@ Essa entrega tem como objetivo nos ajudar a entender sua forma de pensar e estru
 
 ![Diagrama de Arquitetura](Architecture.png)
 
+
+## Filtragem Colaborativa, Baseada em Conteúdo e a Combinação Híbrida
+
+### 1. Filtragem Colaborativa com ALS (Alternating Least Squares)
+A Filtragem Colaborativa (FC) é uma técnica baseada em encontrar padrões de preferências em interações históricas (ex.: compras ou visitas de clientes a restaurantes). O ALS é um método amplamente utilizado para lidar com essas interações em dados esparsos, como matrizes onde poucos clientes interagem com muitos restaurantes.
+
+**Por que usar ALS?**
+* Escalabilidade: Funciona bem em grandes datasets esparsos.
+* Exploração de relações latentes: Identifica padrões escondidos, como "clientes que gostaram de A também gostam de B".
+
+### 2. Baseada em Conteúdo com LightGBM ou XGBoost
+Os modelos baseados em conteúdo utilizam as características dos restaurantes e preferências do cliente para fazer recomendações personalizadas. Modelos como LightGBM e XGBoost são ideais para explorar essas relações porque:
+
+* Capturam não-linearidades nas interações.
+* São robustos a dados tabulares com diferentes tipos de variáveis (categóricas e contínuas).
+
+**Por que usar LightGBM/XGBoost?**
+* Excelente desempenho com dados tabulares.
+* Flexibilidade para incluir muitas variáveis, como distância e avaliações.
+* Rápido e escalável.
+
+### 3. Modelo Híbrido (Combinação de Scores)
+
+### Combinação de Scores
+
+Combine os scores gerados pelos modelos colaborativos (ALS) e baseados em conteúdo (LightGBM/XGBoost) com uma métrica adicional de **distância normalizada**. Isso permite:
+
+- **Personalizar as recomendações** com base no histórico (ALS).
+- **Incorporar características específicas** de restaurantes e contexto (LightGBM/XGBoost).
+- **Ajustar as recomendações** com base na proximidade geográfica.
+
+---
+
+### Como Funciona
+
+#### **Calcule os Scores**
+1. **Score Colaborativo (\( S_c \))**: Probabilidade ou ranking gerado pelo ALS.
+2. **Score Conteúdo (\( S_t \))**: Probabilidade gerada pelo LightGBM.
+3. **Distância Normalizada (\( S_d \))**: Normalize as distâncias entre 0 e 1:
+   
+   $$ S_d = 1 - \text{distância normalizada} $$
+
+#### **Combine os Scores**
+- Fórmula:
+  $$\text{Score Final} = \alpha \cdot S_c + \beta \cdot S_t + \gamma \cdot S_d $$
+- Ajuste os pesos (\( \alpha, \beta, \gamma \)) com base em validação cruzada para balancear o impacto de cada componente.
+
+
+#### Inferência
+
+1. Receba os dados em tempo real (cliente e restaurantes).
+2. Calcule a distância e crie as features.
+3. Gere os scores colaborativo e de conteúdo.
+4. Combine os scores usando os pesos definidos.
+5. Retorne os restaurantes mais relevantes em um ranking final.
+
 ---
